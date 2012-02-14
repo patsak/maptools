@@ -1,0 +1,19 @@
+#!/usr/bin/python
+import maptools.minimap
+import sys
+import os
+import argparse
+
+if __name__ == "__main__":
+	argv = sys.argv
+	parser = argparse.ArgumentParser(description="Program for to split map in chunk for per day of track.")
+	parser.add_argument("MAP_PATH", type=argparse.FileType("r"),nargs=1,help="Path to map in geotiff format")
+	parser.add_argument("GPX_PATH", type=argparse.FileType("r"),nargs=1,help="Path to track in GPX format")
+	parser.add_argument("--utczone",type=int,choices=xrange(-12,12),help="Time relative to UTC")
+	args = parser.parse_args()
+	
+	zone=0
+	if "--utczone" in args:
+		zone=args.utczone[0]
+	
+	maptools.minimap.split_by_gpx(os.path.abspath(args.MAP_PATH[0].name),os.path.abspath(args.GPX_PATH[0].name),zone)
